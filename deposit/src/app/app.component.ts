@@ -203,4 +203,8 @@ export class AppComponent {
       this.isLoading = false;
     }, 1000);
   }
+
+  test(){
+    
+  }
 }
