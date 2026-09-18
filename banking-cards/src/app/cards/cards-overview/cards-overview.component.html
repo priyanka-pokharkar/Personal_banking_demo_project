@@ -1,0 +1,153 @@
+<div class="cards-standalone-layout">
+  <!-- Independent Header for Standalone View -->
+  <header class="standalone-navbar">
+    <div class="brand">
+      <h2>{{ revampFallback()['cards-portal']['headerTitle'] }}</h2>
+      <span class="badge">{{ revampFallback()['cards-portal']['badgeText'] }}</span>
+    </div>
+    <div class="header-actions">
+      <button class="action-btn outline" (click)="toggleFreezeAllCards()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>{{ isAllFrozen ? revampFallback()['cards-portal']['unfreezeAllText'] : revampFallback()['cards-portal']['freezeAllText'] }}</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Standalone Content -->
+  <main class="standalone-body">
+    
+    <!-- Quick Account Summary Bar -->
+    <section class="banking-summary-bar">
+      <div class="summary-item">
+        <span class="label">{{ revampFallback()['cards-portal']['totalLimitLabel'] }}</span>
+        <strong class="val">{{ revampFallback()['cards-portal']['totalLimitVal'] }}</strong>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="label">{{ revampFallback()['cards-portal']['availableSpendLabel'] }}</span>
+        <strong class="val positive">{{ revampFallback()['cards-portal']['availableSpendVal'] }}</strong>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-item">
+        <span class="label">{{ revampFallback()['cards-portal']['statementDueLabel'] }}</span>
+        <strong class="val warning">{{ revampFallback()['cards-portal']['statementDueVal'] }}</strong>
+        <span class="sub-text">{{ revampFallback()['cards-portal']['statementSubText'] }}</span>
+      </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <div class="card-grid">
+      <!-- Card 1 -->
+      <div class="card-item primary" [class.frozen]="card1Frozen()">
+        <div class="card-top">
+          <span class="card-type">{{ revampFallback()['cards-portal']['card1Type'] }}</span>
+          <span class="status-badge" [class.inactive]="card1Frozen()">{{ card1Frozen() ? 'Frozen' : revampFallback()['cards-portal']['card1Status'] }}</span>
+        </div>
+        <h3>{{ revampFallback()['cards-portal']['card1Title'] }}</h3>
+        <p class="card-number">
+          {{ card1ShowDetails() ? '4532 8812 9044 4892' : revampFallback()['cards-portal']['card1Number'] }}
+        </p>
+        <div class="card-details">
+          <span>Expires: {{ revampFallback()['cards-portal']['card1Expiry'] }} | CVV: {{ card1ShowDetails() ? revampFallback()['cards-portal']['card1Cvv'] : '•••' }}</span>
+          <div class="card-actions-mini">
+            <button (click)="toggleCardFreeze(1)" title="Freeze/Unfreeze">🔒</button>
+            <button (click)="viewCardDetails(1)" title="View Details">{{ card1ShowDetails() ? '🔒' : '👁️' }}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card-item secondary" [class.frozen]="card2Frozen()">
+        <div class="card-top">
+          <span class="card-type">{{ revampFallback()['cards-portal']['card2Type'] }}</span>
+          <span class="status-badge" [class.inactive]="card2Frozen()">{{ card2Frozen() ? 'Frozen' : revampFallback()['cards-portal']['card2Status'] }}</span>
+        </div>
+        <h3>{{ revampFallback()['cards-portal']['card2Title'] }}</h3>
+        <p class="card-number">
+          {{ card2ShowDetails() ? '5412 7500 3110 1045' : revampFallback()['cards-portal']['card2Number'] }}
+        </p>
+        <div class="card-details">
+          <span>Expires: {{ revampFallback()['cards-portal']['card2Expiry'] }} | CVV: {{ card2ShowDetails() ? revampFallback()['cards-portal']['card2Cvv'] : '•••' }}</span>
+          <div class="card-actions-mini">
+            <button (click)="toggleCardFreeze(2)" title="Freeze/Unfreeze">🔒</button>
+            <button (click)="viewCardDetails(2)" title="View Details">{{ card2ShowDetails() ? '🔒' : '👁️' }}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card-item accent" [class.frozen]="card3Frozen()">
+        <div class="card-top">
+          <span class="card-type">{{ revampFallback()['cards-portal']['card3Type'] }}</span>
+          <span class="status-badge" [class.inactive]="card3Frozen()">{{ card3Frozen() ? 'Frozen' : revampFallback()['cards-portal']['card3Status'] }}</span>
+        </div>
+        <h3>{{ revampFallback()['cards-portal']['card3Title'] }}</h3>
+        <p class="card-number">
+          {{ card3ShowDetails() ? '3782 4400 1120 7721' : revampFallback()['cards-portal']['card3Number'] }}
+        </p>
+        <div class="card-details">
+          <span>Expires: {{ revampFallback()['cards-portal']['card3Expiry'] }} | CVV: {{ card3ShowDetails() ? revampFallback()['cards-portal']['card3Cvv'] : '•••' }}</span>
+          <div class="card-actions-mini">
+            <button (click)="toggleCardFreeze(3)" title="Freeze/Unfreeze">🔒</button>
+            <button (click)="viewCardDetails(3)" title="View Details">{{ card3ShowDetails() ? '🔒' : '👁️' }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Control & Security Settings Panel -->
+    <section class="card-management-section">
+      <div class="section-header">
+        <h3>{{ revampFallback()['cards-portal']['securityTitle'] }}</h3>
+        <p>{{ revampFallback()['cards-portal']['securitySubtitle'] }}</p>
+      </div>
+
+      <div class="settings-grid">
+        <div class="setting-card">
+          <div class="setting-info">
+            <strong>{{ revampFallback()['cards-portal']['setting1Title'] }}</strong>
+            <span>{{ revampFallback()['cards-portal']['setting1Desc'] }}</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-info">
+            <strong>{{ revampFallback()['cards-portal']['setting2Title'] }}</strong>
+            <span>{{ revampFallback()['cards-portal']['setting2Desc'] }}</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-info">
+            <strong>{{ revampFallback()['cards-portal']['setting3Title'] }}</strong>
+            <span>{{ revampFallback()['cards-portal']['setting3Desc'] }}</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-info">
+            <strong>{{ revampFallback()['cards-portal']['setting4Title'] }}</strong>
+            <span>{{ revampFallback()['cards-portal']['setting4Desc'] }}</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>

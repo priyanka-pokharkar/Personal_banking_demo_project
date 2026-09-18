@@ -1,0 +1,192 @@
+<div class="deposit-overview-container" *ngIf="router.url.includes('/deposit')">
+  <!-- Page Header -->
+  <div class="page-header-section">
+    <div class="header-titles">
+      <h2>{{ revampFallback()?.['deposit-header']?.['title'] }}</h2>
+      <p>{{ revampFallback()?.['deposit-header']?.['subtitle'] }}</p>
+    </div>
+    <div class="status-badge-wrapper">
+      <span class="status-indicator-dot"></span> {{ revampFallback()?.['deposit-header']?.['statusBadge'] }}
+    </div>
+  </div>
+
+  <!-- Metric Summary Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card dark-gradient-card">
+      <span class="card-label">{{ revampFallback()?.['deposit-metrics']?.['totalInvestedLabel'] }}</span>
+      <div class="card-amount">{{ revampFallback()?.['deposit-metrics']?.['totalInvested'] }}</div>
+      <div class="card-pill-tag">{{ revampFallback()?.['deposit-metrics']?.['investedReturn'] }}</div>
+    </div>
+
+    <div class="metric-card light-blue-card" [class.selected]="activeTab === 'fd'" (click)="switchTab('fd')">
+      <span class="card-label">{{ revampFallback()?.['deposit-metrics']?.['fdLabel'] }}</span>
+      <div class="card-amount">{{ revampFallback()?.['deposit-metrics']?.['fdAmount'] }}</div>
+      <div class="card-subtext">{{ revampFallback()?.['deposit-metrics']?.['fdSubtext'] }}</div>
+    </div>
+
+    <div class="metric-card light-green-card" [class.selected]="activeTab === 'rd'" (click)="switchTab('rd')">
+      <span class="card-label">{{ revampFallback()?.['deposit-metrics']?.['rdLabel'] }}</span>
+      <div class="card-amount">{{ revampFallback()?.['deposit-metrics']?.['rdAmount'] }}</div>
+      <div class="card-subtext">{{ revampFallback()?.['deposit-metrics']?.['rdSubtext'] }}</div>
+    </div>
+  </div>
+
+  <!-- Action Tabs -->
+  <div class="action-tab-buttons">
+    <button class="btn-action dark-btn" [class.active]="activeTab === 'fd'" (click)="switchTab('fd')">
+      {{ revampFallback()?.['deposit-actions']?.['bookFdBtn'] }}
+    </button>
+    <button class="btn-action green-btn" [class.active]="activeTab === 'rd'" (click)="switchTab('rd')">
+      {{ revampFallback()?.['deposit-actions']?.['openRdBtn'] }}
+    </button>
+    <!-- <button class="btn-action outline-btn" [class.active]="activeTab === 'savings'" (click)="switchTab('savings')">
+      {{ revampFallback()?.['deposit-actions']?.['savingsTopupBtn'] }}
+    </button> -->
+  </div>
+
+  <!-- Global Alerts -->
+  <div *ngIf="errorMessage" class="alert error-alert">
+    <span>{{ errorMessage }}</span>
+  </div>
+  <div *ngIf="successMessage" class="alert success-alert">
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <!-- ================= TAB CONTENT ================= -->
+  <div class="content-panel-card">
+    
+    <!-- TAB 1: FD -->
+    <div *ngIf="activeTab === 'fd'" class="tab-pane-grid">
+      <div class="form-side">
+        <h3>{{ revampFallback()?.['fd-form-content']?.['formTitle'] }}</h3>
+        <form (submit)="bookFD(); $event.preventDefault()">
+          <div class="form-group">
+            <label>{{ revampFallback()?.['fd-form-content']?.['amountLabel'] }}</label>
+            <div class="input-wrap">
+              <span class="sym">₹</span>
+              <input type="number" [(ngModel)]="fdAmount" name="fdAmount" min="5000" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{ revampFallback()?.['fd-form-content']?.['tenureLabel'] }} <strong>{{ fdTenureYears }} Year(s)</strong></label>
+            <input type="range" [(ngModel)]="fdTenureYears" name="fdTenureYears" min="1" max="10" class="form-range" />
+          </div>
+          <div class="calc-preview-box">
+            <div>
+              <span class="lbl">{{ revampFallback()?.['fd-form-content']?.['interestRateLabel'] }}</span>
+              <span class="val">{{ fdInterestRate }}% p.a.</span>
+            </div>
+            <div class="text-right">
+              <span class="lbl">{{ revampFallback()?.['fd-form-content']?.['maturityLabel'] }}</span>
+              <span class="val green">{{ calculatedFDMaturity | currency:'INR':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">{{ revampFallback()?.['fd-form-content']?.['submitBtn'] }}</button>
+        </form>
+      </div>
+
+      <div class="list-side">
+        <h3>{{ revampFallback()?.['fd-form-content']?.['listTitle'] }}</h3>
+        <div class="data-table-wrapper">
+          <div class="row-item" *ngFor="let fd of activeFDs">
+            <div>
+              <span class="badge-tag">{{ fd.fdNumber }}</span>
+              <div class="sub-text">Tenure: {{ fd.tenure }}</div>
+            </div>
+            <div class="text-right">
+              <div class="amt-val">{{ fd.maturityAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+              <span class="status-pill">{{ revampFallback()?.['fd-form-content']?.['statusText'] }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: RD -->
+    <div *ngIf="activeTab === 'rd'" class="tab-pane-grid">
+      <div class="form-side">
+        <h3>{{ revampFallback()?.['rd-form-content']?.['formTitle'] }}</h3>
+        <form (submit)="bookRD(); $event.preventDefault()">
+          <div class="form-group">
+            <label>{{ revampFallback()?.['rd-form-content']?.['amountLabel'] }}</label>
+            <div class="input-wrap">
+              <span class="sym">₹</span>
+              <input type="number" [(ngModel)]="rdMonthlyAmount" name="rdMonthlyAmount" min="1000" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{ revampFallback()?.['rd-form-content']?.['tenureLabel'] }} <strong>{{ rdTenureMonths }} Months</strong></label>
+            <input type="range" [(ngModel)]="rdTenureMonths" name="rdTenureMonths" min="6" max="60" step="6" class="form-range" />
+          </div>
+          <div class="calc-preview-box">
+            <div>
+              <span class="lbl">{{ revampFallback()?.['rd-form-content']?.['interestRateLabel'] }}</span>
+              <span class="val">{{ rdInterestRate }}% p.a.</span>
+            </div>
+            <div class="text-right">
+              <span class="lbl">{{ revampFallback()?.['rd-form-content']?.['maturityLabel'] }}</span>
+              <span class="val green">{{ calculatedRDMaturity | currency:'INR':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">{{ revampFallback()?.['rd-form-content']?.['submitBtn'] }}</button>
+        </form>
+      </div>
+
+      <div class="list-side">
+        <h3>{{ revampFallback()?.['rd-form-content']?.['listTitle'] }}</h3>
+        <div class="data-table-wrapper">
+          <div class="row-item" *ngFor="let rd of activeRDs">
+            <div>
+              <span class="badge-tag rd-tag">{{ rd.rdNumber }}</span>
+              <div class="sub-text">Monthly: {{ rd.monthlyAmt | currency:'INR':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="text-right">
+              <div class="amt-val">{{ rd.maturityAmount | currency:'INR':'symbol':'1.0-0' }}</div>
+              <span class="status-pill">{{ revampFallback()?.['rd-form-content']?.['statusText'] }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: SAVINGS TOP-UP -->
+    <div *ngIf="activeTab === 'savings'" class="tab-pane-grid">
+      <div class="form-side">
+        <h3>{{ revampFallback()?.['savings-form-content']?.['formTitle'] }}</h3>
+        <form (submit)="depositSavings(); $event.preventDefault()">
+          <div class="form-group">
+            <label>{{ revampFallback()?.['savings-form-content']?.['targetAccountLabel'] }}</label>
+            <select [(ngModel)]="selectedAccount" name="selectedAccount" class="form-control">
+              <option value="savings_primary">Primary Savings (XXXX-8921)</option>
+              <option value="savings_salary">Salary Account (XXXX-3310)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ revampFallback()?.['savings-form-content']?.['amountLabel'] }}</label>
+            <div class="input-wrap">
+              <span class="sym">₹</span>
+              <input type="number" [(ngModel)]="savingsAmount" name="savingsAmount" placeholder="Enter amount" class="form-control" />
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">{{ revampFallback()?.['savings-form-content']?.['submitBtn'] }}</button>
+        </form>
+      </div>
+
+      <div class="list-side">
+        <h3>{{ revampFallback()?.['savings-form-content']?.['listTitle'] }}</h3>
+        <div class="data-table-wrapper">
+          <div class="row-item" *ngFor="let acc of accounts | keyvalue">
+            <div>
+              <div class="acc-name">{{ acc.value.name }}</div>
+              <div class="sub-text">{{ acc.value.number }}</div>
+            </div>
+            <div class="text-right">
+              <div class="amt-val">{{ acc.value.balance | currency:'INR':'symbol':'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

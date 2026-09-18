@@ -1,0 +1,173 @@
+<div class="account-container">
+  <!-- Header Banner -->
+  <header class="account-header">
+    <div class="user-greeting">
+      <h1>{{ revampFallback()['account-overview']['headerTitle'] }}</h1>
+      <p class="subtitle">{{ revampFallback()['account-overview']['subtitleWelcome'] }}<strong>{{ revampFallback()['account-overview']['userName'] }}</strong>{{ revampFallback()['account-overview']['subtitleSuffix'] }}</p>
+    </div>
+    <div class="account-badge">
+      <span class="dot"></span> {{ revampFallback()['account-overview']['badgeText'] }}
+    </div>
+  </header>
+
+  <!-- Metric Summary Cards -->
+  <section class="metrics-grid">
+    <!-- Total Balance Card -->
+    <div class="metric-card dark-gradient-card">
+      <span class="card-label">{{ revampFallback()['account-overview']['card1Title'] }}</span>
+      <div class="card-amount" id="total-balance">{{ totalBalance() }}</div>
+      <div class="card-pill-tag positive">{{ revampFallback()['account-overview']['card1Footer'] }}</div>
+    </div>
+
+    <!-- Savings / Account 2 Card -->
+    <div class="metric-card light-blue-card">
+      <span class="card-label">{{ revampFallback()['account-overview']['card2Title'] }}</span>
+      <div class="card-amount" id="savings-balance">{{ savingsBalance() }}</div>
+      <div class="card-subtext">{{ revampFallback()['account-overview']['card2Footer'] }}</div>
+    </div>
+
+    <!-- Checking / Account 3 Card -->
+    <div class="metric-card light-green-card">
+      <span class="card-label">{{ revampFallback()['account-overview']['card3Title'] }}</span>
+      <div class="card-amount" id="checking-balance">{{ checkingBalance() }}</div>
+      <div class="card-subtext">{{ revampFallback()['account-overview']['card3Footer'] }}</div>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="actions-section">
+    <button class="btn-action dark-btn" (click)="openTransferModal()">{{ revampFallback()['account-overview']['actionBtn1'] }}</button>
+    <button class="btn-action green-btn" (click)="downloadTransactions()">{{ revampFallback()['account-overview']['actionBtn2'] }}</button>
+  </section>
+
+  <!-- Recent Transactions Section -->
+  <section class="transactions-section">
+    <div class="section-header">
+      <h2>{{ revampFallback()['account-overview']['transactionsTitle'] }}</h2>
+      
+      <!-- Filters Group -->
+      <div class="filters-group">
+        <div class="search-box">
+          <label for="searchQuery" class="filter-label">Search</label>
+          <input 
+            id="searchQuery"
+            type="text" 
+            [value]="searchQuery()"
+            [placeholder]="revampFallback()['account-overview']['searchPlaceholder'] || 'Search transactions...'" 
+            (input)="onSearchInput($event)"
+            class="search-input">
+        </div>
+
+        <div class="date-box">
+          <label for="startDate" class="filter-label">Start Date</label>
+          <input 
+            id="startDate"
+            type="date" 
+            [value]="startDate()"
+            (input)="onStartDateInput($event)"
+            class="date-input">
+        </div>
+
+        <div class="date-box">
+          <label for="endDate" class="filter-label">End Date</label>
+          <input 
+            id="endDate"
+            type="date" 
+            [value]="endDate()"
+            [min]="startDate()"
+            (input)="onEndDateInput($event)"
+            class="date-input">
+        </div>
+
+        <button (click)="resetFilters()" class="reset-btn" type="button">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>{{ revampFallback()['account-overview']['thDesc'] }}</th>
+            <th>{{ revampFallback()['account-overview']['thCategory'] }}</th>
+            <th>{{ revampFallback()['account-overview']['thDate'] }}</th>
+            <th>{{ revampFallback()['account-overview']['thStatus'] }}</th>
+            <th class="text-right">{{ revampFallback()['account-overview']['thAmount'] }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of filteredTransactions()">
+            <td class="font-medium">{{ tx.desc }}</td>
+            <td>{{ tx.category }}</td>
+            <td>{{ tx.date }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="tx.badge">{{ tx.status }}</span>
+            </td>
+            <td class="text-right" [ngClass]="{'amount-positive': tx.positive}">{{ tx.amount }}</td>
+          </tr>
+
+          <tr *ngIf="filteredTransactions().length === 0">
+            <td colspan="5" class="text-center no-results">No matching transactions found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Transfer Money Modal Overlay Flow (Fixed UI) -->
+  <div class="transfer-modal-backdrop" *ngIf="isTransferModalOpen">
+    <div class="transfer-modal-card">
+      <div class="modal-header">
+        <h3>{{ revampFallback()['account-overview']['actionBtn1'] || 'Transfer Money' }}</h3>
+        <button class="close-btn" (click)="closeTransferModal()">&times;</button>
+      </div>
+
+      <!-- Success Feedback View -->
+      <div *ngIf="transferSuccessMessage" class="success-alert">
+        {{ transferSuccessMessage }}
+      </div>
+
+      <!-- Error Feedback View -->
+      <div *ngIf="transferErrorMessage" class="error-alert">
+        {{ transferErrorMessage }}
+      </div>
+
+      <!-- Transfer Form -->
+      <form *ngIf="!transferSuccessMessage" (submit)="executeTransfer($event)" class="transfer-form">
+        <div class="form-group">
+          <label for="recipient">Recipient Account</label>
+          <input 
+            id="recipient" 
+            type="text" 
+            [(ngModel)]="transferRecipient" 
+            name="recipient" 
+            placeholder="547854789652" 
+            required 
+            class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Transfer Amount (₹)</label>
+          <div class="input-wrap">
+            <span class="sym">₹</span>
+            <input 
+              id="amount" 
+              type="number" 
+              [(ngModel)]="transferAmount" 
+              name="amount" 
+              placeholder="0.00" 
+              min="1" 
+              required 
+              class="form-input symbol-pad">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-action outline-btn" (click)="closeTransferModal()">Cancel</button>
+          <button type="submit" class="btn-action dark-btn" [disabled]="!transferAmount || !transferRecipient">Send Money</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+{
+  "screenCoverage": "single",
+  "moduleIdentifier": "deposit",
+  "lastModified": "2026-09-02T09:37:11.892",
+  "content": [
+    {
+      "screenIdentifier": "deposit-overview",
+      "screenContent": [
+        {
+          "key": "deposit-header",
+          "title": "Deposit Portal (AEM)",
+          "subtitle": "Welcome back, Sarah! Manage your fixed, recurring, and savings investments.",
+          "statusBadge": "Active Portfolio"
+        },
+        {
+          "key": "deposit-metrics",
+          "totalInvestedLabel": "TOTAL INVESTED",
+          "totalInvested": "₹1,25,000.00",
+          "investedReturn": "+8.4% return p.a.",
+          "fdLabel": "FIXED DEPOSITS (FD)",
+          "fdAmount": "₹1,00,000.00",
+          "fdSubtext": "Active FDs: 2 Accounts",
+          "rdLabel": "RECURRING DEPOSITS (RD)",
+          "rdAmount": "₹25,000.00",
+          "rdSubtext": "Active RDs: 1 Account"
+        },
+        {
+          "key": "deposit-actions",
+          "bookFdBtn": "Book Fixed Deposit",
+          "openRdBtn": "Open Recurring Deposit",
+          "savingsTopupBtn": "Savings Top-up"
+        },
+        {
+          "key": "fd-form-content",
+          "formTitle": "Book New Fixed Deposit",
+          "amountLabel": "Principal Investment Amount (₹)",
+          "tenureLabel": "Tenure:",
+          "interestRateLabel": "Interest Rate",
+          "maturityLabel": "Maturity Value",
+          "submitBtn": "Confirm & Book FD",
+          "listTitle": "Active Fixed Deposits",
+          "statusText": "Active"
+        },
+        {
+          "key": "rd-form-content",
+          "formTitle": "Open Recurring Deposit",
+          "amountLabel": "Monthly Installment (₹)",
+          "tenureLabel": "Tenure:",
+          "interestRateLabel": "Interest Rate",
+          "maturityLabel": "Total Maturity",
+          "submitBtn": "Open Recurring Deposit",
+          "listTitle": "Active Recurring Deposits",
+          "statusText": "Running"
+        },
+        {
+          "key": "savings-form-content",
+          "formTitle": "Instant Savings Top-up",
+          "targetAccountLabel": "Target Account",
+          "amountLabel": "Deposit Amount (₹)",
+          "submitBtn": "Add Funds",
+          "listTitle": "Account Summaries"
+        }
+      ]
+    }
+  ]
+}

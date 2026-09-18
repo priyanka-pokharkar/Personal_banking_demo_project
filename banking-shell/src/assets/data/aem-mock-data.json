@@ -1,0 +1,62 @@
+{
+  "screenCoverage": "single",
+  "moduleIdentifier": "dashboard",
+  "lastModified": "2026-09-02T09:37:11.892",
+  "content": [
+    {
+      "screenIdentifier": "home-dashboard",
+      "screenContent": [
+        {
+          "key": "brand-info",
+          "title": "Global Retail Bank (AEM)",
+          "subtitle": "Host Shell Portal • AEM V2.0"
+        },
+        {
+          "key": "user-info",
+          "name": "Sarah Jenkins (AEM)",
+          "role": "VIP Member",
+          "avatarUrl": "https://picsum.photos/id/1005/100/100"
+        },
+        {
+          "key": "hero-section",
+          "badge": "Host Shell Portal v16.2",
+          "welcomeTitle": "Welcome back, Sarah! 👋",
+          "description": "Manage multi-channel accounts, request instant credit line upgrades, and access integrated financial services securely from a single dashboard.",
+          "ctaCardsText": "Manage Cards MFE ↗",
+          "ctaAccountsText": "View Accounts ↗"
+        },
+        {
+          "key": "card-preview",
+          "maskedNumber": "•••• •••• •••• 8842",
+          "holderLabel": "CARDHOLDER",
+          "holderName": "SARAH JENKINS",
+          "logo": "VISA"
+        },
+        {
+          "key": "cart-info",
+          "title": "🛒 Banking Requests Basket",
+          "triggerText": "Pending Requests",
+          "emptyMessage": "No pending banking services added.",
+          "emptySubtext": "Select from the available options below to add requests.",
+          "totalLabel": "Total Processing Fees:",
+          "checkoutBtnText": "Submit Requests"
+        },
+        {
+          "key": "sidebar-info",
+          "navHeader": "Navigation",
+          "footerText": "Micro-Frontend Gateway Active"
+        },
+        {
+            "key": "auth-info",
+            "title": "Welcome Back",
+            "subtitle": "Please sign in to access your dashboard",
+            "usernameLabel": "Username",
+            "usernamePlaceholder": "Enter your username",
+            "passwordLabel": "Password",
+            "passwordPlaceholder": "Enter your password",
+            "submitButtonText": "Sign In"
+        }
+      ]
+    }
+  ]
+}

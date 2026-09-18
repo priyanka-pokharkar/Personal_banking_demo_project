@@ -1,0 +1,58 @@
+{
+  "screenCoverage": "single",
+  "moduleIdentifier": "account-management",
+  "lastModified": "2026-09-11T12:00:00.000",
+  "content": [
+    {
+      "screenIdentifier": "account-dashboard",
+      "screenContent": [
+        {
+          "key": "account-overview",
+          "headerTitle": "Account Overview (AEM)",
+          "subtitleWelcome": "Welcome back, ",
+          "userName": "Sarah",
+          "subtitleSuffix": "! Here is your financial breakdown.",
+          "badgeText": "Active Account",
+          "card1Title": "Total Balance",
+          "card1Amount": "₹24,850.42",
+          "card1Footer": "+3.2% from last month",
+          "card2Title": "Savings Account",
+          "card2Amount": "₹18,200.00",
+          "card2Footer": "Account ending in **** 4892",
+          "card3Title": "Checking Account",
+          "card3Amount": "₹6,650.42",
+          "card3Footer": "Account ending in **** 1034",
+          "actionBtn1": "Transfer Money",
+          "actionBtn2": "Download Statement",
+          "actionBtn3": "Manage Cards",
+          "transactionsTitle": "Recent Transactions",
+          "thDesc": "Description",
+          "thCategory": "Category",
+          "thDate": "Date",
+          "thStatus": "Status",
+          "thAmount": "Amount",
+          "tx1Desc": "Tech Corp Salary",
+          "tx1Category": "Income",
+          "tx1Date": "Oct 12, 2025",
+          "tx1Status": "Completed",
+          "tx1Amount": "+₹4,200.00",
+          "tx2Desc": "Amazon Grocery",
+          "tx2Category": "Shopping",
+          "tx2Date": "Oct 10, 2025",
+          "tx2Status": "Completed",
+          "tx2Amount": "-₹142.30",
+          "tx3Desc": "Electric Utility Co",
+          "tx3Category": "Bills",
+          "tx3Date": "Oct 08, 2025",
+          "tx3Status": "Pending",
+          "tx3Amount": "-₹85.00",
+          "tx4Desc": "Coffee House",
+          "tx4Category": "Food & Drinks",
+          "tx4Date": "Oct 05, 2025",
+          "tx4Status": "Completed",
+          "tx4Amount": "-₹12.50"
+        }
+      ]
+    }
+  ]
+}

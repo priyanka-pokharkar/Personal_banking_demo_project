@@ -1,0 +1,253 @@
+<div class="shell-layout">
+  <!-- Authentication Overlay / View -->
+  <div class="auth-wrapper" *ngIf="!isAuthenticated">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+          </svg>
+        </div>
+        <h2>{{ revampFallback()?.['auth-info']?.['title'] }}</h2>
+        <p>{{ revampFallback()?.['auth-info']?.['subtitle'] }}</p>
+      </div>
+
+      <form class="auth-form" (submit)="login($event)">
+        <div *ngIf="loginError" class="auth-error-banner">
+          {{ loginError }}
+        </div>
+
+        <div class="form-group">
+          <label for="username">{{ revampFallback()?.['auth-info']?.['usernameLabel'] }}</label>
+          <input type="text" id="username" [placeholder]="revampFallback()?.['auth-info']?.['usernamePlaceholder']" [value]="loginUsername" (input)="loginUsername = $any($event.target).value" name="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">{{ revampFallback()?.['auth-info']?.['passwordLabel'] }}</label>
+          <input type="password" id="password" [placeholder]="revampFallback()?.['auth-info']?.['passwordPlaceholder']" [value]="loginPassword" (input)="loginPassword = $any($event.target).value" name="password" />
+        </div>
+
+        <button type="submit" class="auth-submit-btn">{{ revampFallback()?.['auth-info']?.['submitButtonText'] }}</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Application Shell (Visible after login) -->
+  <ng-container *ngIf="isAuthenticated">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-title">{{ revampFallback()?.['brand-info']?.['title'] }}</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="cart-trigger" (click)="toggleCart()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span>{{ revampFallback()?.['cart-info']?.['triggerText'] }}</span>
+          <span class="cart-badge">{{ selectedServices.length }}</span>
+        </button>
+
+        <div class="user-profile">
+          <img [src]="revampFallback()?.['user-info']?.['avatarUrl']" alt="User Avatar" class="avatar" />
+          <div>
+            <span class="user-name">{{ revampFallback()?.['user-info']?.['name'] }}</span>
+            <span class="user-role">{{ revampFallback()?.['user-info']?.['role'] }}</span>
+          </div>
+        </div>
+
+        <button class="logout-btn" (click)="logout()" title="Sign Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Body Wrapper -->
+    <div class="app-container">
+      
+      <!-- Vertical Scrollable Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <span class="sidebar-label">{{ revampFallback()?.['sidebar-info']?.['navHeader'] }}</span>
+          
+          <a 
+            *ngFor="let link of navLinks"
+            [routerLink]="link.path" 
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{ exact: !!link.exact }" 
+            class="sidebar-btn">
+            <span class="icon-wrap" [innerHTML]="link.safeIconSvg"></span>
+            {{ link.label }}
+          </a>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="info-card">
+            <span class="status-dot"></span>
+            <span>{{ revampFallback()?.['sidebar-info']?.['footerText'] }}</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Slide-Out Cart Drawer -->
+      <div class="cart-drawer" [class.open]="isCartOpen">
+        <div class="cart-header">
+          <h3>{{ revampFallback()?.['cart-info']?.['title'] }}</h3>
+          <button class="close-btn" (click)="toggleCart()">✕</button>
+        </div>
+
+        <div class="cart-body">
+          <div *ngIf="selectedServices.length === 0" class="empty-cart">
+            <p>{{ revampFallback()?.['cart-info']?.['emptyMessage'] }}</p>
+            <small>{{ revampFallback()?.['cart-info']?.['emptySubtext'] }}</small>
+          </div>
+
+          <div *ngFor="let item of selectedServices; let i = index" class="cart-item">
+            <div class="item-info">
+              <strong>{{ item.name }}</strong>
+              <span>Fee: ${{ item.fee.toFixed(2) }}</span>
+            </div>
+            <button class="remove-btn" (click)="removeService(i)">Remove</button>
+          </div>
+        </div>
+
+        <div class="cart-footer" *ngIf="selectedServices.length > 0">
+          <div class="total-row">
+            <span>{{ revampFallback()?.['cart-info']?.['totalLabel'] }}</span>
+            <strong>${{ getTotalFees().toFixed(2) }}</strong>
+          </div>
+          <button class="checkout-btn" (click)="checkoutRequests()">{{ revampFallback()?.['cart-info']?.['checkoutBtnText'] }}</button>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <main class="main-page-content">
+
+        <div class="home-dashboard" *ngIf="router.url === '/'">
+          
+          <!-- Welcome Hero Section -->
+          <section class="hero-card">
+            <div class="hero-text">
+              <span class="badge-pill">{{ revampFallback()?.['hero-section']?.['badge'] }}</span>
+              <h1>Welcome back, Sarah! 👋</h1>
+              <p>{{ revampFallback()?.['hero-section']?.['description'] }}</p>
+              <div class="hero-cta-group">
+                <a routerLink="/cards" class="btn-secondary">{{ revampFallback()?.['hero-section']?.['ctaCardsText'] }}</a>
+                <a routerLink="/accounts" class="btn-secondary">{{ revampFallback()?.['hero-section']?.['ctaAccountsText'] }}</a>
+                <a routerLink="/deposit" class="btn-secondary">Deposit</a>
+              </div>
+            </div>
+            <div class="hero-graphic">
+              <div class="card-glass">
+                <div class="card-chip"></div>
+                <div class="card-number">{{ revampFallback()?.['card-preview']?.['maskedNumber'] }}</div>
+                <div class="card-holder">
+                  <span>{{ revampFallback()?.['card-preview']?.['holderLabel'] }}</span>
+                  <strong>SARAH JENKINS</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Success Notification Banner -->
+          <div class="success-notification-banner" *ngIf="activeSuccessMessage">
+            <div class="success-icon-box">✓</div>
+            <div class="success-text-content">
+              <strong>Success!</strong>
+              <p>{{ activeSuccessMessage }}</p>
+            </div>
+            <button class="dismiss-alert-btn" (click)="activeSuccessMessage = null">✕</button>
+          </div>
+
+          <!-- Financial Metrics Grid -->
+          <section class="metrics-grid">
+            <div *ngFor="let metric of metrics" class="metric-card">
+              <div class="metric-icon" [ngClass]="metric.iconClass">{{ metric.icon }}</div>
+              <div class="metric-data">
+                <span class="label">{{ metric.label }}</span>
+                <strong class="val">{{ metric.value }}</strong>
+                <span [class.trend]="metric.isPositiveTrend" [class.positive]="metric.isPositiveTrend" [class.sub-label]="!metric.isPositiveTrend">
+                  {{ metric.trendOrSublabel }}
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Special Offers Section -->
+          <section class="special-offers-section">
+            <div class="section-header-title">
+              <h3>Special Offers For You</h3>
+              <p>Handpicked financial deals and credit opportunities curated based on your account activity.</p>
+            </div>
+
+            <div class="special-offers-grid">
+              <!-- Card 1 -->
+              <div class="special-offer-card">
+                <div class="offer-top-row">
+                  <span class="offer-badge">Exclusive</span>
+                  <span class="offer-expiry">Ends in 4 days</span>
+                </div>
+                <h4>Titanium Rewards Credit Line</h4>
+                <p>Earn 5x bonus points on travel and enjoy zero foreign transaction fees worldwide.</p>
+                <div class="offer-footer-link">
+                  <button *ngIf="!offer1Activated" (click)="activateOffer(1, 'Titanium Rewards Credit Line activated successfully!')" class="action-btn-link">
+                    Activate Offer &rarr;
+                  </button>
+                  <span *ngIf="offer1Activated" class="activated-badge-text">✓ Offer Activated</span>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="special-offer-card">
+                <div class="offer-top-row">
+                  <span class="offer-badge">Instant Banking</span>
+                  <span class="offer-expiry">48h Delivery</span>
+                </div>
+                <h4>Express Checkbook & Paper Statements</h4>
+                <p>Order printed account statements or physical checks delivered within 48 hours.</p>
+                <div class="offer-footer-link">
+                  <button *ngIf="!offer2Activated" (click)="activateOffer(2, 'Express Checkbook order placed successfully!')" class="action-btn-link">
+                    Order Now &rarr;
+                  </button>
+                  <span *ngIf="offer2Activated" class="activated-badge-text">✓ Order Placed</span>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="special-offer-card">
+                <div class="offer-top-row">
+                  <span class="offer-badge">Pre-Approved</span>
+                  <span class="offer-expiry">0% APR</span>
+                </div>
+                <h4>Platinum Rewards Credit Card Upgrade</h4>
+                <p>Enjoy 5x reward points on dining and travel with no annual fee for the first year.</p>
+                <div class="offer-footer-link">
+                  <button *ngIf="!offer3Activated" (click)="activateOffer(3, 'Platinum Rewards upgrade claim registered successfully!')" class="action-btn-link">
+                    Claim Upgrade &rarr;
+                  </button>
+                  <span *ngIf="offer3Activated" class="activated-badge-text">✓ Upgrade Claimed</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </ng-container>
+</div>
